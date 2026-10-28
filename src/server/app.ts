@@ -1,11 +1,18 @@
 import path from "node:path";
 import compression from "compression";
 import express, { type ErrorRequestHandler, type Express } from "express";
+import type { AiAnalyzer } from "./ai/gemini.js";
+import { createAnalyzeRouter } from "./routes/analyze.js";
 
 export interface AppOptions {
   /** Directory holding the built Vite app. Defaults to dist/web under the working directory. */
   staticDir?: string;
+  /** Gemini analyzer; null runs the rule engine only. */
+  analyzer?: AiAnalyzer | null;
 }
+
+// A 4 MB image is ~5.4 MB as base64, plus the text and JSON overhead.
+const JSON_BODY_LIMIT = "6mb";
 
 const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
@@ -22,6 +29,11 @@ export function createApp(options: AppOptions = {}): Express {
     res.json({ ok: true });
   });
 
+  app.use(
+    "/api",
+    express.json({ limit: JSON_BODY_LIMIT }),
+    createAnalyzeRouter({ analyzer: options.analyzer ?? null }),
+  );
   app.use("/api", (_req, res) => {
     res.status(404).json({ error: "Not found" });
   });

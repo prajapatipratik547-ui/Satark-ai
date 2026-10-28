@@ -21,7 +21,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "eval": "tsx scripts/eval.ts"
+    "eval": "tsx --env-file-if-exists=.env scripts/eval.ts"
   },
   "dependencies": {
     "@google/genai": "^2.31.0",
