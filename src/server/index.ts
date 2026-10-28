@@ -11,6 +11,9 @@ const analyzer = apiKey ? createGeminiAnalyzer({ apiKey, model }) : null;
 const server = createApp({ analyzer }).listen(port, () => {
   console.log(`Satark listening on port ${String(port)} (AI ${analyzer ? model : "off"})`);
 });
+// Never let a slow client or upstream hold a connection open indefinitely.
+server.requestTimeout = 30_000;
+server.headersTimeout = 15_000;
 
 // Cloud Run sends SIGTERM before stopping an instance; let in-flight requests finish.
 process.on("SIGTERM", () => {

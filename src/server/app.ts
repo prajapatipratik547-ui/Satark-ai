@@ -1,6 +1,8 @@
 import path from "node:path";
 import compression from "compression";
-import express, { type ErrorRequestHandler, type Express } from "express";
+import express, { type ErrorRequestHandler, type Express, type RequestHandler } from "express";
+import { rateLimit } from "express-rate-limit";
+import helmet from "helmet";
 import type { AiAnalyzer } from "./ai/gemini.js";
 import { createAnalyzeRouter } from "./routes/analyze.js";
 
@@ -9,21 +11,49 @@ export interface AppOptions {
   staticDir?: string;
   /** Gemini analyzer; null runs the rule engine only. */
   analyzer?: AiAnalyzer | null;
+  /** Requests per minute per IP on /api. */
+  rateLimitPerMinute?: number;
 }
 
 // A 4 MB image is ~5.4 MB as base64, plus the text and JSON overhead.
 const JSON_BODY_LIMIT = "6mb";
-
+const DEFAULT_RATE_LIMIT_PER_MINUTE = 20;
 const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
+
+/** Strict CSP: only our own scripts and styles, no inline code, images only from us or local blobs. */
+const securityHeaders = helmet({
+  contentSecurityPolicy: {
+    useDefaults: false,
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "blob:"],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"],
+      frameAncestors: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  },
+  referrerPolicy: { policy: "no-referrer" },
+});
+
+const permissionsPolicy: RequestHandler = (_req, res, next) => {
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=()");
+  next();
+};
 
 export function createApp(options: AppOptions = {}): Express {
   const staticDir = options.staticDir ?? path.resolve("dist/web");
   const app = express();
 
   app.disable("x-powered-by");
-  // Cloud Run sits behind one proxy hop; needed so rate limiting sees the real client IP.
+  // The app runs behind one proxy hop (Cloud Run / Render); needed so rate limiting sees the client IP.
   app.set("trust proxy", 1);
-  app.use(compression());
+  app.use(securityHeaders, permissionsPolicy, compression());
 
   app.get("/healthz", (_req, res) => {
     res.json({ ok: true });
@@ -31,6 +61,13 @@ export function createApp(options: AppOptions = {}): Express {
 
   app.use(
     "/api",
+    rateLimit({
+      windowMs: 60_000,
+      limit: options.rateLimitPerMinute ?? DEFAULT_RATE_LIMIT_PER_MINUTE,
+      standardHeaders: "draft-8",
+      legacyHeaders: false,
+      message: { error: "Too many requests. Please wait a minute and try again." },
+    }),
     express.json({ limit: JSON_BODY_LIMIT }),
     createAnalyzeRouter({ analyzer: options.analyzer ?? null }),
   );
