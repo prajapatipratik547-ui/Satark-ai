@@ -1,11 +1,7 @@
 import type { LanguageCode } from "./languages.js";
-import { PLAYBOOKS, type Situation } from "./resources.js";
+import { PLAYBOOK_TRANSLATIONS } from "./playbook-translations.js";
+import { PLAYBOOKS, type PlaybookStep, type Situation } from "./resources.js";
 import type { Verdict } from "./types.js";
-
-/** Translations of playbook steps, keyed by step id. English comes from resources.ts. */
-export const PLAYBOOK_TRANSLATIONS: Partial<
-  Record<LanguageCode, Readonly<Record<string, string>>>
-> = {};
 
 /** Used when the AI is unavailable or disagrees with the rule engine. */
 export const FALLBACK_SUMMARIES: Readonly<Record<LanguageCode, Readonly<Record<Verdict, string>>>> =
@@ -60,9 +56,12 @@ export const FALLBACK_SUMMARIES: Readonly<Record<LanguageCode, Readonly<Record<V
     },
   };
 
+export function stepText(step: PlaybookStep, language: LanguageCode): string {
+  return language === "en" ? step.text : (PLAYBOOK_TRANSLATIONS[language][step.id] ?? step.text);
+}
+
 export function playbookTexts(situation: Situation, language: LanguageCode): string[] {
-  const translations = PLAYBOOK_TRANSLATIONS[language];
-  return PLAYBOOKS[situation].map((step) => translations?.[step.id] ?? step.text);
+  return PLAYBOOKS[situation].map((step) => stepText(step, language));
 }
 
 export function fallbackSummary(verdict: Verdict, language: LanguageCode): string {

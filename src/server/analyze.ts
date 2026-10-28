@@ -4,6 +4,8 @@ import type { AnalysisResult, RedFlag } from "../shared/types.js";
 import type { AiAnalyzer } from "./ai/gemini.js";
 import { findQuotedPhrase, normalizeForMatch, stripContactDetails } from "./ai/sanitize.js";
 import { redact } from "./engine/redact.js";
+import { localizedRuleReason } from "./engine/rule-reasons.js";
+import type { LanguageCode } from "../shared/languages.js";
 import { NO_SCAM_TYPE, analyzeWithRules, type RuleMatch } from "./engine/rules.js";
 import { SUSPICIOUS_THRESHOLD, mergeScores } from "./engine/score.js";
 
@@ -44,7 +46,7 @@ export async function analyzeMessage(
   // If the AI calls it safe but the merged verdict is not (e.g. a prompt-injection attempt fooled
   // the model), don't show the AI's reassuring words.
   const aiAgrees = ai !== null && ai.riskScore >= SUSPICIOUS_THRESHOLD === (verdict !== "safe");
-  const ruleFlags = toRuleFlags(rules.matches);
+  const ruleFlags = toRuleFlags(rules.matches, request.language);
 
   return {
     verdict,
@@ -60,14 +62,15 @@ export async function analyzeMessage(
   };
 }
 
-function toRuleFlags(matches: readonly RuleMatch[]): RedFlag[] {
+function toRuleFlags(matches: readonly RuleMatch[], language: LanguageCode): RedFlag[] {
   const seen = new Set<string>();
   const flags: RedFlag[] = [];
   for (const match of matches) {
     const key = normalizeForMatch(match.phrase);
     if (seen.has(key)) continue;
     seen.add(key);
-    flags.push({ phrase: match.phrase, reason: match.reason, source: "rules" });
+    const reason = localizedRuleReason(match.ruleId, match.reason, language);
+    flags.push({ phrase: match.phrase, reason, source: "rules" });
     if (flags.length >= MAX_RULE_FLAGS) break;
   }
   return flags;

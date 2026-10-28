@@ -1,11 +1,13 @@
 import { z } from "zod";
 import { LANGUAGE_CODES } from "./languages.js";
+import { IMAGE_MIME_TYPES, MAX_IMAGE_BYTES, MAX_TEXT_LENGTH } from "./limits.js";
 
-export const MAX_TEXT_LENGTH = 4000;
-export const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
-export const IMAGE_MIME_TYPES = ["image/png", "image/jpeg", "image/webp"] as const;
-
-export type ImageMimeType = (typeof IMAGE_MIME_TYPES)[number];
+export {
+  IMAGE_MIME_TYPES,
+  MAX_IMAGE_BYTES,
+  MAX_TEXT_LENGTH,
+  type ImageMimeType,
+} from "./limits.js";
 
 const BASE64_PATTERN = /^[A-Za-z0-9+/]+={0,2}$/;
 // Base64 needs 4 characters per 3 bytes.
