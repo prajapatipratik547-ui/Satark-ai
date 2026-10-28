@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { LANGUAGE_CODES, type LanguageCode } from "../shared/languages.js";
+import { isLanguageCode, type LanguageCode } from "../shared/languages.js";
 import type { AnalysisResult } from "../shared/types.js";
 import { Footer } from "./components/Footer.js";
 import { Header } from "./components/Header.js";
@@ -28,10 +28,9 @@ interface CheckInput {
 
 function initialLanguage(): LanguageCode {
   const stored = readSetting("language");
-  if (stored && (LANGUAGE_CODES as readonly string[]).includes(stored))
-    return stored as LanguageCode;
-  const browser = navigator.language.split("-")[0] ?? "en";
-  return (LANGUAGE_CODES as readonly string[]).includes(browser) ? (browser as LanguageCode) : "en";
+  if (isLanguageCode(stored)) return stored;
+  const browser = navigator.language.split("-")[0];
+  return isLanguageCode(browser) ? browser : "en";
 }
 
 export function App() {

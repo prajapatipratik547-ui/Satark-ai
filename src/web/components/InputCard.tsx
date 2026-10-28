@@ -6,7 +6,12 @@ import {
   type SubmitEvent,
   type Ref,
 } from "react";
-import { LANGUAGES, LANGUAGE_CODES, type LanguageCode } from "../../shared/languages.js";
+import {
+  LANGUAGES,
+  LANGUAGE_CODES,
+  isLanguageCode,
+  type LanguageCode,
+} from "../../shared/languages.js";
 import { MAX_TEXT_LENGTH } from "../../shared/limits.js";
 import type { UiStrings } from "../i18n.js";
 import { EXAMPLES } from "../lib/examples.js";
@@ -60,7 +65,7 @@ export function InputCard(props: InputCardProps) {
             id="language"
             value={props.language}
             onChange={(event) => {
-              props.onLanguageChange(event.target.value as LanguageCode);
+              if (isLanguageCode(event.target.value)) props.onLanguageChange(event.target.value);
             }}
           >
             {LANGUAGE_CODES.map((code) => (

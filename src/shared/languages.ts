@@ -2,6 +2,10 @@ export const LANGUAGE_CODES = ["en", "hi", "mr", "ta", "te", "bn", "gu", "kn"] a
 
 export type LanguageCode = (typeof LANGUAGE_CODES)[number];
 
+export function isLanguageCode(value: unknown): value is LanguageCode {
+  return typeof value === "string" && (LANGUAGE_CODES as readonly string[]).includes(value);
+}
+
 export interface Language {
   code: LanguageCode;
   englishName: string;

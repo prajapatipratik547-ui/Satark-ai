@@ -128,13 +128,13 @@ Lighthouse on the live site: **Accessibility 100 · Performance 99 · Best Pract
 
 ## Tests
 
-**207 tests** across 12 files (`npm test`), run in CI on every push together with lint, typecheck, eval, build and `npm audit`:
+**208 tests** across 12 files (`npm test`; `npm run test:coverage` measures about 82% line coverage), run in CI on every push together with lint, typecheck, eval, build and `npm audit`:
 
 | Area                                                                                                 | File                | Tests |
 | ---------------------------------------------------------------------------------------------------- | ------------------- | ----- |
 | Rule engine (every rule, negatives, offsets, ReDoS guard, injection)                                 | `rules.test.ts`     | 59    |
 | API: validation, fallback, evidence check, URL/phone stripping, prompt injection, cache, screenshots | `api.test.ts`       | 25    |
-| Highlighting, flag grouping, resizing, translation completeness and safety                           | `web-lib.test.ts`   | 31    |
+| Highlighting, flag grouping, resizing, translation completeness and safety                           | `web-lib.test.ts`   | 32    |
 | AI-text sanitising, prompt boundary, LRU cache                                                       | `sanitize.test.ts`  | 20    |
 | PII redaction                                                                                        | `redact.test.ts`    | 14    |
 | Score merge and verdict boundaries                                                                   | `score.test.ts`     | 13    |

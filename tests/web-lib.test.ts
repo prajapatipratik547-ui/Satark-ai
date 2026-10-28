@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { stepText } from "../src/shared/guidance.js";
-import { LANGUAGE_CODES } from "../src/shared/languages.js";
+import { LANGUAGE_CODES, isLanguageCode } from "../src/shared/languages.js";
 import { PLAYBOOK_TRANSLATIONS } from "../src/shared/playbook-translations.js";
 import { PLAYBOOKS } from "../src/shared/resources.js";
 import { RULES } from "../src/server/engine/rules.js";
@@ -9,6 +9,14 @@ import { getStrings } from "../src/web/i18n.js";
 import { groupFlags } from "../src/web/lib/flags.js";
 import { highlightSegments } from "../src/web/lib/highlight.js";
 import { fitWithin } from "../src/web/lib/image.js";
+
+describe("isLanguageCode", () => {
+  it("accepts only the 8 supported languages", () => {
+    for (const code of LANGUAGE_CODES) expect(isLanguageCode(code)).toBe(true);
+    for (const value of ["fr", "", "EN", null, undefined, 1])
+      expect(isLanguageCode(value)).toBe(false);
+  });
+});
 
 describe("groupFlags", () => {
   it("shows each reason once, listing all its phrases in order", () => {
