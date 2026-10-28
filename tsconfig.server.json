@@ -1,0 +1,14 @@
+{
+  // Emits the Node server (and the shared code it imports) to dist/. NodeNext enforces .js import extensions.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2023"],
+    "types": ["node"],
+    "rootDir": "src",
+    "outDir": "dist",
+    "noEmit": false
+  },
+  "include": ["src/server", "src/shared"]
+}

@@ -1,0 +1,140 @@
+:root {
+  color-scheme: light dark;
+  --color-bg: #f4f7f9;
+  --color-surface: #ffffff;
+  --color-text: #13232f;
+  --color-text-muted: #44576a;
+  --color-brand: #0b3d5c;
+  --color-brand-contrast: #ffffff;
+  --color-accent: #0f6e6e;
+  --color-warning: #8a4b00;
+  --color-danger: #b3261e;
+  --color-focus: #1a73e8;
+  --color-border: #c9d4dd;
+  --radius: 12px;
+  --space: 1rem;
+  --font-body:
+    system-ui, -apple-system, "Segoe UI", "Noto Sans", "Noto Sans Devanagari", sans-serif;
+  --font-size-base: 1.0625rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0e1a22;
+    --color-surface: #16262f;
+    --color-text: #e6eef3;
+    --color-text-muted: #a9bccb;
+    --color-brand: #0b3d5c;
+    --color-accent: #5cc8c8;
+    --color-warning: #f2b45a;
+    --color-danger: #ff8a80;
+    --color-focus: #8ab4f8;
+    --color-border: #2c4250;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+#root {
+  display: contents;
+}
+
+a {
+  color: var(--color-accent);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.container {
+  width: 100%;
+  max-width: 44rem;
+  margin-inline: auto;
+  padding-inline: var(--space);
+}
+
+.site-header {
+  background: var(--color-brand);
+  color: var(--color-brand-contrast);
+  padding-block: 1.25rem;
+}
+
+.brand {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.tagline {
+  margin: 0.25rem 0 0;
+}
+
+main {
+  flex: 1;
+  padding-block: 1.5rem;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+.site-footer {
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  padding-block: 1rem;
+  font-size: 0.9375rem;
+}
+
+.site-footer p {
+  margin: 0 0 0.5rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
