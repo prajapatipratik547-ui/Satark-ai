@@ -4,6 +4,7 @@ import { LANGUAGES } from "../../shared/languages.js";
 import { PLAYBOOKS, RESOURCES, SITUATIONS, type Situation } from "../../shared/resources.js";
 import type { AnalysisResult, Verdict } from "../../shared/types.js";
 import type { UiStrings } from "../i18n.js";
+import { groupFlags } from "../lib/flags.js";
 import { highlightSegments } from "../lib/highlight.js";
 import { isSpeechSupported, speak, stopSpeaking } from "../lib/speech.js";
 
@@ -90,11 +91,17 @@ export function ResultCard({ result, message, strings, onCheckAnother }: ResultC
         <p>{strings.noRedFlags}</p>
       ) : (
         <ul className="flags">
-          {result.redFlags.map((flag) => (
-            <li key={`${flag.source}-${flag.phrase}`}>
-              <q>{flag.phrase}</q> <span>{flag.reason}</span>{" "}
-              <span className={`tag tag--${flag.source}`}>
-                {flag.source === "ai" ? strings.foundByAi : strings.foundByRules}
+          {groupFlags(result.redFlags).map((group) => (
+            <li key={`${group.source}-${group.reason}`}>
+              {group.phrases.map((phrase, index) => (
+                <span key={phrase}>
+                  {index > 0 && ", "}
+                  <q>{phrase}</q>
+                </span>
+              ))}{" "}
+              <span>{group.reason}</span>{" "}
+              <span className={`tag tag--${group.source}`}>
+                {group.source === "ai" ? strings.foundByAi : strings.foundByRules}
               </span>
             </li>
           ))}

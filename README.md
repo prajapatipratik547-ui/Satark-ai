@@ -21,6 +21,14 @@ Paste a message or upload a screenshot, and within seconds you get, in your own 
 
 No account, no app install, nothing stored.
 
+## Screenshots
+
+| A scam, with the evidence highlighted                                                                                                 | The same result in Hindi                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| ![Scam verdict for a digital-arrest message, with red-flag phrases highlighted](docs/screenshots/scam-result.png)                     | ![The same result explained in Hindi](docs/screenshots/hindi-result.png)                             |
+| **Next steps for your situation**                                                                                                     | **Paste a message or try an example**                                                                |
+| ![Red flags tagged "Found by rules" and "Found by AI", the What happened? selector and the playbook](docs/screenshots/next-steps.png) | ![The input card with language select, tabs and example buttons](docs/screenshots/check-message.png) |
+
 ## How Satark differs from reputation-based checkers
 
 Satark doesn't claim to be the first scam checker. Truecaller launched a free Scam Checker in India on 28 Sep 2026, which checks numbers and links against crowd-reported data (screenshot upload was announced but not shipped). Satark **complements** that kind of tool:
@@ -120,13 +128,13 @@ Lighthouse on the live site: **Accessibility 100 · Performance 99 · Best Pract
 
 ## Tests
 
-**204 tests** across 12 files (`npm test`), run in CI on every push together with lint, typecheck, eval, build and `npm audit`:
+**205 tests** across 12 files (`npm test`), run in CI on every push together with lint, typecheck, eval, build and `npm audit`:
 
 | Area                                                                                                 | File                | Tests |
 | ---------------------------------------------------------------------------------------------------- | ------------------- | ----- |
 | Rule engine (every rule, negatives, offsets, ReDoS guard, injection)                                 | `rules.test.ts`     | 59    |
 | API: validation, fallback, evidence check, URL/phone stripping, prompt injection, cache, screenshots | `api.test.ts`       | 25    |
-| Highlighting, resizing, translation completeness and safety                                          | `web-lib.test.ts`   | 30    |
+| Highlighting, flag grouping, resizing, translation completeness and safety                           | `web-lib.test.ts`   | 31    |
 | AI-text sanitising, prompt boundary, LRU cache                                                       | `sanitize.test.ts`  | 20    |
 | PII redaction                                                                                        | `redact.test.ts`    | 14    |
 | Score merge and verdict boundaries                                                                   | `score.test.ts`     | 13    |

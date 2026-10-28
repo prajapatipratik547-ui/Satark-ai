@@ -6,8 +6,25 @@ import { PLAYBOOKS } from "../src/shared/resources.js";
 import { RULES } from "../src/server/engine/rules.js";
 import { TRANSLATED_RULE_IDS } from "../src/server/engine/rule-reasons.js";
 import { getStrings } from "../src/web/i18n.js";
+import { groupFlags } from "../src/web/lib/flags.js";
 import { highlightSegments } from "../src/web/lib/highlight.js";
 import { fitWithin } from "../src/web/lib/image.js";
+
+describe("groupFlags", () => {
+  it("shows each reason once, listing all its phrases in order", () => {
+    const groups = groupFlags([
+      { phrase: "Inspector", reason: "Claims to be police.", source: "rules" },
+      { phrase: "digital arrest", reason: "Not a real thing.", source: "rules" },
+      { phrase: "CBI", reason: "Claims to be police.", source: "rules" },
+      { phrase: "pay now", reason: "Claims to be police.", source: "ai" },
+    ]);
+    expect(groups).toEqual([
+      { phrases: ["Inspector", "CBI"], reason: "Claims to be police.", source: "rules" },
+      { phrases: ["digital arrest"], reason: "Not a real thing.", source: "rules" },
+      { phrases: ["pay now"], reason: "Claims to be police.", source: "ai" },
+    ]);
+  });
+});
 
 describe("highlightSegments", () => {
   it("marks every occurrence, ignoring case, and keeps the rest as plain text", () => {
