@@ -29,6 +29,11 @@ export function Header({ strings, largeText, onToggleLargeText }: HeaderProps) {
             Satark
           </h1>
           <p className="tagline">{strings.tagline}</p>
+          <ul className="highlights">
+            <li>{strings.badgeHybrid}</li>
+            <li>{strings.badgeLanguages}</li>
+            <li>{strings.badgeNoStorage}</li>
+          </ul>
         </div>
         <button
           type="button"

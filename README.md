@@ -128,7 +128,7 @@ Lighthouse on the live site: **Accessibility 100 · Performance 99 · Best Pract
 
 ## Tests
 
-**205 tests** across 12 files (`npm test`), run in CI on every push together with lint, typecheck, eval, build and `npm audit`:
+**207 tests** across 12 files (`npm test`), run in CI on every push together with lint, typecheck, eval, build and `npm audit`:
 
 | Area                                                                                                 | File                | Tests |
 | ---------------------------------------------------------------------------------------------------- | ------------------- | ----- |
@@ -139,7 +139,7 @@ Lighthouse on the live site: **Accessibility 100 · Performance 99 · Best Pract
 | PII redaction                                                                                        | `redact.test.ts`    | 14    |
 | Score merge and verdict boundaries                                                                   | `score.test.ts`     | 13    |
 | Gemini client with `vi.mock` (schema, retry, timeout)                                                | `gemini.test.ts`    | 12    |
-| UI components + axe accessibility                                                                    | `ui.test.tsx`       | 11    |
+| UI components + axe accessibility                                                                    | `ui.test.tsx`       | 13    |
 | Verified resources and playbooks                                                                     | `resources.test.ts` | 8     |
 | Security headers, rate limiting, no stack traces                                                     | `security.test.ts`  | 5     |
 | Static serving and cache headers                                                                     | `app.test.ts`       | 5     |

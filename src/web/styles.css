@@ -59,6 +59,11 @@
 html {
   -webkit-text-size-adjust: 100%;
   font-size: 106.25%;
+  scroll-behavior: smooth;
+}
+
+.result-region {
+  scroll-margin-top: 1rem;
 }
 
 /* Larger-text mode for elderly users; every size below is in rem, so everything scales. */
@@ -167,6 +172,23 @@ a {
 
 .tagline {
   margin: 0.25rem 0 0;
+}
+
+.highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.highlights li {
+  padding: 0.1rem 0.65rem;
+  border: 1px solid rgb(255 255 255 / 0.7);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 .toggle {

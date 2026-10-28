@@ -48,7 +48,9 @@ export function App() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const lastCheckRef = useRef<CheckInput | null>(null);
+  const resultRegionRef = useRef<HTMLDivElement>(null);
   const strings = getStrings(language);
+  const showingResultArea = loading || result !== null;
 
   useEffect(() => {
     document.documentElement.lang = language;
@@ -63,6 +65,11 @@ export function App() {
   useEffect(() => {
     if (focusRequest > 0) textareaRef.current?.focus();
   }, [focusRequest]);
+
+  // Bring the spinner, then the verdict, into view so nobody has to scroll to see what happened.
+  useEffect(() => {
+    if (showingResultArea) scrollIntoViewGently(resultRegionRef.current);
+  }, [showingResultArea, result]);
 
   async function runCheck(input: CheckInput, checkLanguage: LanguageCode) {
     if (!input.text.trim() && !input.image) {
@@ -183,7 +190,7 @@ export function App() {
           textareaRef={textareaRef}
         />
 
-        <div className="result-region" aria-live="polite" aria-busy={loading}>
+        <div ref={resultRegionRef} className="result-region" aria-live="polite" aria-busy={loading}>
           {loading && (
             <p className="loading">
               <span className="spinner" aria-hidden="true" />
@@ -204,4 +211,10 @@ export function App() {
       <Footer strings={strings} />
     </>
   );
+}
+
+/** Smoothness comes from CSS scroll-behavior, which prefers-reduced-motion switches off. */
+function scrollIntoViewGently(element: HTMLElement | null) {
+  if (!element || typeof element.scrollIntoView !== "function") return;
+  element.scrollIntoView({ block: "start" });
 }

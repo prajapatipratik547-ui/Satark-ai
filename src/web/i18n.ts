@@ -2,6 +2,9 @@ import type { LanguageCode } from "../shared/languages.js";
 
 export interface UiStrings {
   tagline: string;
+  badgeHybrid: string;
+  badgeLanguages: string;
+  badgeNoStorage: string;
   skipToContent: string;
   largeText: string;
   languageLabel: string;
@@ -60,6 +63,9 @@ export interface UiStrings {
 
 const en: UiStrings = {
   tagline: "Check any message before you trust it",
+  badgeHybrid: "Rules + Gemini AI",
+  badgeLanguages: "8 Indian languages",
+  badgeNoStorage: "Nothing stored",
   skipToContent: "Skip to the message checker",
   largeText: "Larger text",
   languageLabel: "Language",
@@ -118,6 +124,9 @@ const en: UiStrings = {
 
 const hi: UiStrings = {
   tagline: "किसी भी संदेश पर भरोसा करने से पहले जांचें",
+  badgeHybrid: "नियम + Gemini AI",
+  badgeLanguages: "8 भारतीय भाषाएं",
+  badgeNoStorage: "कुछ भी सेव नहीं होता",
   skipToContent: "संदेश जांच पर जाएं",
   largeText: "बड़े अक्षर",
   languageLabel: "भाषा",
@@ -176,6 +185,9 @@ const hi: UiStrings = {
 
 const mr: UiStrings = {
   tagline: "कोणत्याही संदेशावर विश्वास ठेवण्यापूर्वी तपासा",
+  badgeHybrid: "नियम + Gemini AI",
+  badgeLanguages: "8 भारतीय भाषा",
+  badgeNoStorage: "काहीही साठवले जात नाही",
   skipToContent: "संदेश तपासणीकडे जा",
   largeText: "मोठी अक्षरे",
   languageLabel: "भाषा",

@@ -70,6 +70,14 @@ describe("App structure and accessibility", () => {
     expect(screen.getByLabelText("Language")).toBeDefined();
   });
 
+  it("says how it works at a glance", () => {
+    render(<App />);
+    const banner = screen.getByRole("banner");
+    for (const badge of ["Rules + Gemini AI", "8 Indian languages", "Nothing stored"]) {
+      expect(within(banner).getByText(badge)).toBeDefined();
+    }
+  });
+
   it("always shows the 1930 helpline as a call link", () => {
     render(<App />);
     expect(screen.getByRole("link", { name: /Call 1930 now/ }).getAttribute("href")).toBe(
@@ -129,6 +137,23 @@ describe("checking a message", () => {
     expect(within(result).getByText("Found by AI")).toBeDefined();
 
     expect((await axe(container, AXE_OPTIONS)).violations).toEqual([]);
+  });
+
+  it("scrolls the result into view so nobody has to look for it", async () => {
+    mockFetch(() => jsonResponse(SCAM_RESULT));
+    const scrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
+    try {
+      render(<App />);
+      await userEvent.click(screen.getByRole("button", { name: "Digital arrest" }));
+      await screen.findByRole("region", { name: "Result" });
+      expect(scrollIntoView).toHaveBeenCalled();
+      const target = scrollIntoView.mock.contexts.at(-1) as Element;
+      expect(target.classList.contains("result-region")).toBe(true);
+    } finally {
+      // jsdom has no scrollIntoView; remove the stub so other tests see the real environment.
+      delete (Element.prototype as Partial<Element>).scrollIntoView;
+    }
   });
 
   it("shows the 1930 and cybercrime.gov.in steps when the user already sent money", async () => {
